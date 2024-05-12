@@ -1,0 +1,172 @@
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Security.Policy;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Publisher_Event
+{
+    public class ArchivedArticlesDataAccess
+    {
+        // Connection string for the database
+        static private string ConnectionString = "Server=.;Database=C21_DB1;User id=sa;Password=sa123456";
+
+        // Method to archive an article
+        static public bool ArchiveArticle(string Title, string Content, string PublisherName)
+        {
+            int RowAffected = -1;
+
+            // Create a new SqlConnection using the connection string
+            SqlConnection connection = new SqlConnection(ConnectionString);
+
+            // SQL query to insert a new record into the ArchivedArticles table
+            string Query = @"
+            INSERT INTO ArchivedArticles
+            VALUES
+                (@Title
+                ,@Content
+                ,GETDATE()
+                ,@PublisherName)
+        ";
+
+            // Create a new SqlCommand with parameters
+            SqlCommand Command = new SqlCommand(Query, connection);
+            Command.Parameters.AddWithValue("@Title", Title);
+            Command.Parameters.AddWithValue("@Content", Content);
+            Command.Parameters.AddWithValue("@PublisherName", PublisherName);
+
+            try
+            {
+                connection.Open();
+                RowAffected = Command.ExecuteNonQuery();
+            }
+            catch (Exception ex) { /* Handle exceptions here */ }
+            finally { connection.Close(); }
+
+            // Return true if the row was affected, otherwise false
+            return RowAffected > 0;
+        }
+    }
+
+    public class NewsArticle
+    {
+        // The title of the news article.
+        public string Title { get; }
+
+        // The content or body of the news article.
+        public string Content { get; }
+
+        // Constructor to initialize the title and content.
+        public NewsArticle(string title, string content)
+        {
+            this.Title = title;
+            this.Content = content;
+        }
+    }
+    public class NewsPublisher
+    {
+        // Event that gets triggered when a new news article is published.
+        public event EventHandler<NewsArticle> evNewsArticle;
+
+        // Method to publish news articles.
+        public void PublishNews(string title, string content)
+        {
+            OnNewNewsPublished(new NewsArticle(title, content));
+        }
+
+        // Protected method to invoke the event when a new news article is published.
+        protected virtual void OnNewNewsPublished(NewsArticle newsArticle)
+        {
+            evNewsArticle?.Invoke(this, newsArticle);
+        }
+    }
+    public class NewsSubscriber
+    {
+        // The name of the news subscriber.
+        private string SubscriberName { get; }
+
+        // Constructor to initialize the subscriber name.
+        public NewsSubscriber(string subscriberName)
+        {
+            this.SubscriberName = subscriberName;
+        }
+
+        // Method to subscribe to a news publisher.
+        public void Subscribe(NewsPublisher publisher)
+        {
+            publisher.evNewsArticle += Publisher_NewsArticlePublished;
+        }
+
+        // Method to unsubscribe from a news publisher.
+        public void Unsubscribe(NewsPublisher publisher)
+        {
+            publisher.evNewsArticle -= Publisher_NewsArticlePublished;
+        }
+
+        // Event handler for when a new news article is published.
+        private void Publisher_NewsArticlePublished(object sender, NewsArticle e)
+        {
+            Console.WriteLine($"\n\nSubscriber Name {SubscriberName}:");
+            Console.WriteLine($"Article Title: {e.Title}");
+            Console.WriteLine($"Article Content: {e.Content}");
+            Console.WriteLine();
+
+            //Archive The Article In [Archived Articles]  Table In DataBase
+            ArchivedArticlesDataAccess.ArchiveArticle(e.Title, e.Content, "Ghayaht For Test");
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create instances
+            NewsPublisher publisher = new NewsPublisher();
+            NewsSubscriber Subscriber1 = new NewsSubscriber("Subscriber 1");
+            NewsSubscriber Subscriber2 = new NewsSubscriber("Subscriber 2");
+
+            // Subscribe subscribers to the publisher
+            Subscriber1.Subscribe(publisher);
+            Subscriber2.Subscribe(publisher);
+
+            // Unsubscribe Subscriber2
+            Subscriber2.Unsubscribe(publisher);
+
+            // Publish a news article
+            publisher.PublishNews("First News", "This is my first event that sends a class as a parameter and does not inherit from EventArgs");
+ 
+            publisher.PublishNews("Breaking News", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+
+            string articleTitle = "Technology Update";
+            string articleContent = "Check out the latest advancements in AI and robotics.";
+            publisher.PublishNews(articleTitle, articleContent);
+
+
+
+
+            // Create an instance of NewsPublisher
+            NewsPublisher sportsPublisher = new NewsPublisher();
+
+            NewsSubscriber Subscriber3 = new NewsSubscriber("sports Publisher");
+
+            Subscriber3.Subscribe(sportsPublisher);
+
+            // Publish a sports news article
+            sportsPublisher.PublishNews("Football Championship", "The local team won the championship match in a thrilling penalty shootout.");
+
+
+            string techArticleTitle = "New Smartphone Launch";
+            string techArticleContent = "The latest smartphone model features a high-resolution camera and 5G connectivity.";
+
+            // Publish a technology news article
+            sportsPublisher.PublishNews(techArticleTitle, techArticleContent);
+
+
+
+            Console.ReadKey();
+
+        }
+    }
+}
