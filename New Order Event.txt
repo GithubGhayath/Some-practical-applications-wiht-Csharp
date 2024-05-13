@@ -1,0 +1,161 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace New_Order_Event
+{
+
+    //Publisher Subscriber Design Battern:
+
+    public class OrderEventArgs : EventArgs
+    {
+        /*
+                   in this script:
+
+                    The OrderEventArgs class inherits from EventArgs.
+                    It has three properties: OrderID, OrderTotalPrice, and ClientEmail.
+                    The constructor initializes these properties with the provided values.
+         * 
+         */
+        public int OrderID { get;}    
+        public double OrderTotalPrice { get; }
+        public string ClientEmail { get; }
+
+        public OrderEventArgs(int orderID, double orderTotalPrice, string clientEmail)
+        {
+            OrderID = orderID;
+            OrderTotalPrice = orderTotalPrice;
+            ClientEmail = clientEmail;
+        }
+    }
+
+    public class Order
+    {
+        /*
+         *       in this script:
+
+                The Order class has an event called OnOrderCreated.
+                The CreateOrder method creates a new order by initializing an instance of OrderEventArgs with the provided OrderID, OrderTotalPrice, and ClientEmail.
+                
+         */
+        public event EventHandler<OrderEventArgs> OnOrderCreated;
+
+        public void CreateOrder(int OrderID,double OrderTotalPrice,string ClientEmail)
+        {
+            var NewOrder = new OrderEventArgs(OrderID, OrderTotalPrice, ClientEmail);
+
+
+            //If there are any subscribers to the OnOrderCreated event, it invokes the event and passes the newly created order.
+            if (OnOrderCreated != null)
+                OnOrderCreated(this, NewOrder);
+        }
+    }
+
+    public class EmailService
+    {
+        // Subscribe method to subscribe to the OnOrderCreated event
+        public void Subscribe(Order order)
+        {
+            order.OnOrderCreated += Order_OnOrderCreated;
+        }
+
+        // Unsubscribe method to unsubscribe from the OnOrderCreated event
+        public void Unsubscribe(Order order)
+        {
+            order.OnOrderCreated -= Order_OnOrderCreated;
+        }
+
+        // Event handler for the OnOrderCreated event
+        private void Order_OnOrderCreated(object sender, OrderEventArgs e)
+        {
+            Console.WriteLine($"\n\n----------------------Email Service----------------------");
+            Console.WriteLine($"Email Service object received a new order event");
+            Console.WriteLine($"Order ID: {e.OrderID}");
+            Console.WriteLine($"Order Price: {e.OrderTotalPrice}");
+            Console.WriteLine($"Email: {e.ClientEmail}");
+            Console.WriteLine($"Email Sent");
+            Console.WriteLine($"---------------------------------------------------------");
+        }
+    }
+
+    public class ShippingService
+    {
+        // Subscribe method to subscribe to the OnOrderCreated event
+        public void Subscribe(Order order)
+        {
+            order.OnOrderCreated += Order_OnOrderCreated;
+        }
+
+        // Unsubscribe method to unsubscribe from the OnOrderCreated event
+        public void UnSubscribe(Order order)
+        {
+            order.OnOrderCreated -= Order_OnOrderCreated;
+        }
+
+        // Event handler for the OnOrderCreated event
+        private void Order_OnOrderCreated(object sender, OrderEventArgs e)
+        {
+            Console.WriteLine($"\n\n----------------------Shipping Service----------------------");
+            Console.WriteLine($"Shipping Service object received a new order event");
+            Console.WriteLine($"Order ID: {e.OrderID}");
+            Console.WriteLine($"Order Price: {e.OrderTotalPrice}");
+            Console.WriteLine($"Email: {e.ClientEmail}");
+            Console.WriteLine($"Shipping Sent"); 
+            Console.WriteLine($"---------------------------------------------------------");
+        }
+    }
+
+    public class SMSService
+    {
+        // Subscribe method to subscribe to the OnOrderCreated event
+        public void Subscribe(Order order)
+        {
+            order.OnOrderCreated += Order_OnOrderCreated;
+        }
+
+        // Unsubscribe method to unsubscribe from the OnOrderCreated event
+        public void UnSubscribe(Order order)
+        {
+            order.OnOrderCreated -= Order_OnOrderCreated;
+        }
+
+        // Event handler for the OnOrderCreated event
+        private void Order_OnOrderCreated(object sender, OrderEventArgs e)
+        {
+            Console.WriteLine($"\n\n----------------------SMS Service----------------------");
+            Console.WriteLine($"SMS Service object received a new order event");
+            Console.WriteLine($"Order ID: {e.OrderID}");
+            Console.WriteLine($"Order Price: {e.OrderTotalPrice}");
+            Console.WriteLine($"Email: {e.ClientEmail}");
+            Console.WriteLine($"SMS Sent"); 
+            Console.WriteLine($"---------------------------------------------------------");
+        }
+    }
+
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Order NewOrder = new Order(); // Create a new Order object
+
+            EmailService emailService = new EmailService(); // Create an EmailService object
+            ShippingService shippingService = new ShippingService(); // Create a ShippingService object
+            SMSService sMSService = new SMSService(); // Create an SMSService object
+
+            // Subscribe the services to the OnOrderCreated event of the NewOrder
+            emailService.Subscribe(NewOrder);
+            shippingService.Subscribe(NewOrder);
+            sMSService.Subscribe(NewOrder);
+
+            // Create a new order with the specified details
+            NewOrder.CreateOrder(1, 253.2d, "Ghayath@gmail.com");
+
+            Console.ReadKey(); // Wait for a key press before exiting
+
+        }
+    }
+}
