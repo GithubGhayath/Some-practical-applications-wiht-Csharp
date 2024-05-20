@@ -1,0 +1,75 @@
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+//Using To create an alias
+using Print = System.Console;
+
+//Using Static Directive
+using static System.Math;
+using System.IO;
+using System;
+using System.Data.SqlClient;
+using System.Net.Sockets;
+
+
+namespace USING
+{
+    /*
+     *                              *Using Statment
+     *                              
+     *                      1 => To Import Libraries
+     *                      2 => To Create An Alias   ::                     Using Name = What do you want to Alies.
+     *                      3 => Static Directive   ---------------> Normal using : for namespaces
+     *                                              |______________> using static : for Class inside namespace it will exposit all members from the class without call by it's name
+     *                      4 => Resources Managment
+     *                      
+     */
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            //Create An Alies
+            //using Prin alias instead of System.Console
+            Print.WriteLine("This is an Alies of Console");
+
+            double num = Sqrt(10);
+            Print.WriteLine(num);
+
+            using (var reader = new StreamReader("example.txt"))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    Console.WriteLine(line);
+                }
+            }
+            // The StreamReader will be automatically closed and resources released.
+
+
+            string connectionString = "This is for Example";
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                // Execute SQL commands
+            }
+            // The SqlConnection will be automatically closed and resources released.
+
+
+
+
+            using (var client = new TcpClient("example.com", 80))
+            {
+                using (var stream = client.GetStream())
+                {
+                    // Read and write to the network stream
+                }
+            }
+            // Both TcpClient and NetworkStream will be automatically closed and resources released.
+
+
+        }
+    }
+}

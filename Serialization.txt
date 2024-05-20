@@ -1,0 +1,123 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Serialization;
+using System.IO;
+using System.Runtime.Serialization.Json;
+using System.Runtime.Serialization.Formatters.Binary;
+
+
+
+[Serializable]
+public class Person
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+
+
+
+namespace Serialization
+{
+    //Serialization / Deserialization
+    /*
+     *                      Serialization in C# refers to the process of converting an object or a data structure into a format that can be easily stored, transmitted, or reconstructed.
+     *                       The primary purpose of serialization is to persistently store the state of an object or to send it over a network.
+     *                       The reverse process, which involves reconstructing the object from its serialized form, is called deserialization.
+     *                       
+     *                       
+     *Serialization Formats in C#:
+     *        => Binary Serialization: This format is efficient but not human-readable. It's suitable for saving object state within the same platform.
+     *        => XML Serialization: Objects are serialized into XML format, which is both human-readable and platform-independent. XML serialization is commonly used when interoperability with other systems is required.
+     *        => JSON Serialization: Similar to XML, JSON is a human-readable and lightweight data interchange format. It is commonly used for web APIs and AJAX requests.
+     *       
+     *Serialization Libraries:
+            In C#, the System.Runtime.Serialization namespace provides classes for binary and XML serialization.
+            The DataContractJsonSerializer class is commonly used for JSON serialization.
+     */
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create an instance of the Person class
+            Person person = new Person { Name = "Mohammed Abu-Hadhoud", Age = 46 };
+
+
+            // XML serialization
+            XmlSerializer serializer = new XmlSerializer(typeof(Person));
+            using (TextWriter writer = new StreamWriter("person.xml"))
+            {
+                serializer.Serialize(writer, person);
+            }
+
+
+            // Deserialize the object back
+            using (TextReader reader = new StreamReader("person.xml"))
+            {
+                Person deserializedPerson = (Person)serializer.Deserialize(reader);
+                Console.WriteLine($"Name: {deserializedPerson.Name}, Age: {deserializedPerson.Age}");
+            }
+
+
+
+
+
+            //-------------------------------------------------------------------------------------------------------------------------
+
+            // Create an instance of the Person class
+            Person person1 = new Person { Name = "Mohammed Abu-Hadhoud", Age = 30 };
+
+
+            // JSON serialization
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Person1));
+            using (MemoryStream stream = new MemoryStream())
+            {
+                serializer.WriteObject(stream, person1);
+                string jsonString = System.Text.Encoding.UTF8.GetString(stream.ToArray());
+
+
+                // Save the JSON string to a file (optional)
+                File.WriteAllText("person.json", jsonString);
+            }
+
+
+            // Deserialize the object back
+            using (FileStream stream = new FileStream("person.json", FileMode.Open))
+            {
+                Person deserializedPerson = (Person)serializer.ReadObject(stream);
+                Console.WriteLine($"Name: {deserializedPerson.Name}, Age: {deserializedPerson.Age}");
+            }
+
+
+
+
+
+            //-------------------------------------------------------------------------------------------------------------------------
+
+
+
+            // Create an instance of the Person class
+            Person person2 = new Person { Name = "Mohammed Abu-Hadhoud", Age = 46 };
+
+
+            // Binary serialization
+            BinaryFormatter formatter = new BinaryFormatter();
+            using (FileStream stream = new FileStream("person.bin", FileMode.Create))
+            {
+                formatter.Serialize(stream, person2);
+            }
+
+
+            // Deserialize the object back
+            using (FileStream stream = new FileStream("person.bin", FileMode.Open))
+            {
+                Person deserializedPerson = (Person)formatter.Deserialize(stream);
+                Console.WriteLine($"Name: {deserializedPerson.Name}, Age: {deserializedPerson.Age}");
+                Console.ReadKey();
+            }
+        }
+    }
+    }
+}
