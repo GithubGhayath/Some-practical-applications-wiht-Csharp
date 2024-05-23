@@ -1,0 +1,124 @@
+//#define TRACE_ENABLED
+//#define MY_CUSTOM_SYMBOL
+
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Attributes
+{
+    /*
+     * In C#, attributes provide a way to add metadata to your code.
+     * They are used to provide additional information about elements in your code, such as classes, methods, properties, and so on.
+     * Attributes are defined using square brackets [] and are placed above the code element they are associated with.
+     * 
+     * Attributes play a crucial role in enhancing code readability,
+     * providing additional information, and enabling frameworks and tools to understand and process your code more effectively.
+     * They are widely used in areas like serialization, documentation, testing, and more.
+     * 
+     * 
+     * 
+     *   Serialization Attributes:
+     *      => The [Serializable] attribute is applied to a class to indicate that its instances can be serialized. 
+     *      => [NonSerialized] Attribute: Applied to a field to indicate that it should not be serialized.
+     *      
+     *      
+     *      
+     *      
+     *      
+     *      
+     *      Conditional Attributes:
+     *      
+     *      In C#, the term "conditional attribute" is commonly associated with the [Conditional] attribute.
+     *      The [Conditional] attribute is used in C# to conditionally include or exclude methods from compilation based on the specified compilation symbols.
+     *      It doesn't affect the runtime behavior of the code but rather influences whether or not a particular method is included in the compiled output.
+     *      
+     *      
+     *      Obsolete Attribute:
+     *      The Obsolete attribute in C# is used to mark program entities (such as classes, methods, properties, etc.) that are considered obsolete or deprecated.
+     *      This attribute informs developers that the marked entity should not be used because it is outdated or will be removed in future versions of the code.
+     *      It also allows you to provide a custom message to suggest an alternative or explain the reason for deprecation.
+     */
+
+
+    [Serializable]
+    public class MyClass
+    {
+        // Will be serialized
+        public int SerializedField;
+
+
+        // Will not be serialized
+        [NonSerialized]
+        public int NonSerializedField;
+        
+        [NonSerialized]
+        public string Test;
+
+
+        [Obsolete("This method will not avalible in future!")]
+        public void Method1()
+        {
+            Console.WriteLine("This method will be remove leter.");
+        }
+
+        public void Method2()
+        {
+            Console.WriteLine("This is a new method");
+        }
+    }
+
+    public class MyClass1
+    {
+        [Conditional("DEBUG")]
+        public void DebugMethod()
+        {
+            Console.WriteLine("This is debug method ");
+        }
+
+        public void NormalMethod()
+        {
+            Console.WriteLine("This is Normal method");
+        }
+
+        [Conditional("TRACE_ENABLED")]
+        public void LoginTrace()
+        {
+            Console.WriteLine("This trace message will only included if  TRACE_ENABLED is defined.");
+        }
+
+        [Conditional("MY_CUSTOM_SYMBOL")]
+        public void printMessage(string message)
+        {
+            Console.WriteLine(message);
+        }
+    }
+
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            MyClass1 myClass = new MyClass1();
+
+            myClass.NormalMethod(); //This will always be executed
+            myClass.DebugMethod(); //This will only executed in DEBUG builds
+            myClass.LoginTrace(); //This will only executed when TRACE_ENABLED is defined
+            myClass.printMessage("This method will executed when MY_CUSTOM_SYMBOL is defined.");
+
+            MyClass myclass2 = new MyClass();
+            // Deprecated method usage
+            myclass2.Method1();// Generates a compiler warning
+
+            // New method usage
+            myclass2.Method2();
+
+
+            Console.ReadKey();
+        }
+    }
+}
