@@ -1,0 +1,110 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Generic_in_Csharp
+{
+    /*
+     *                                  Generics in C#:
+     *         => Genirics in C# provide a powerful way to create reusable, Type-safe components.
+     *         => They allow you to define classes, interfaces, methods, and other constucts with placeholeders for the types they will with,
+     *              enabling you to wirte code that can work with any data type
+     */
+
+
+
+
+
+    /// <summary>
+    /// Represents a generic class that holds a value of type T.
+    /// </summary>
+    /// <typeparam name="T">The type of the value.</typeparam>
+    public class MyClass<T>
+    {
+        private T Value;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MyClass{T}"/> class with the specified value.
+        /// </summary>
+        /// <param name="value">The initial value.</param>
+        public MyClass(T value)
+        {
+            this.Value = value;
+        }
+
+        /// <summary>
+        /// Gets the stored value.
+        /// </summary>
+        /// <returns>The stored value.</returns>
+        public T GetValue()
+        {
+            return Value;
+        }
+    }
+
+
+    internal class Program
+    {
+        /// <summary>
+        /// Swaps the values of two variables of the same type.
+        /// </summary>
+        /// <typeparam name="T">The type of the variables.</typeparam>
+        /// <param name="firstItem">The first variable to swap.</param>
+        /// <param name="secondItem">The second variable to swap.</param>
+        public static void Swap<T>(ref T firstItem, ref T secondItem)
+        {
+            T temp;
+            temp = firstItem;
+            firstItem = secondItem;
+            secondItem = temp;
+        }
+
+        static void Main(string[] args)
+        {
+            int X = 10, Y = 20;
+            char G = 'A', H = 'W';
+            string FirstName = "Ghayath", LastName = "Alali";
+
+            // Display the variables before the swap
+            Console.WriteLine("The variables before Swap:");
+            Console.WriteLine($"Int values: X = {X}, Y = {Y}");
+            Console.WriteLine($"String values: FirstName = {FirstName}, LastName = {LastName}");
+            Console.WriteLine($"Char values: G = {G}, H = {H}");
+
+            // Call the Swap method to swap the values
+            Swap<int>(ref X, ref Y);
+            Swap<string>(ref FirstName, ref LastName);
+            Swap<char>(ref G, ref H);
+
+            // Display the variables after the swap
+            Console.WriteLine("\n\n\nThe variables after Swap:");
+            Console.WriteLine($"Int values: X = {X}, Y = {Y}");
+            Console.WriteLine($"String values: FirstName = {FirstName}, LastName = {LastName}");
+            Console.WriteLine($"Char values: G = {G}, H = {H}");
+
+
+
+
+            MyClass<int> class1 = new MyClass<int>(10);
+            Console.WriteLine($"\n\n\nThe value in Class 1 : {class1.GetValue()}");
+
+
+            MyClass<string> class2 = new MyClass<string>("Ghayath");
+            Console.WriteLine($"The value in Class 1 : {class2.GetValue()}");
+
+            MyClass<char> class3 = new MyClass<char>('M');
+            Console.WriteLine($"The value in Class 1 : {class3.GetValue()}");
+
+            MyClass<bool> class4 = new MyClass<bool>(true);
+            Console.WriteLine($"The value in Class 1 : {class4.GetValue()}");
+
+
+           
+
+            Console.ReadKey();
+
+        }
+    }
+}

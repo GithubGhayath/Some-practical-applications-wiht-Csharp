@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Delegation_Sorting
+{
+
+    public class SortListUsingDelegate
+    {
+        public delegate void Sorting(List<int> list);
+
+        static public event Sorting OnSorting;
+
+        public SortListUsingDelegate(List<int> list)
+        {
+            OnSorting?.Invoke(list);
+        }
+    }
+    public class clsBaseClass
+    {
+        public static List<int> ReadNumberFromScreen()
+        {
+            List<int> numbers = new List<int>();
+            char Y_N;
+
+            do
+            {
+                Console.Write("\n\nEnter a number : ");
+                numbers.Add(Convert.ToInt32(Console.ReadLine()));
+
+                Console.WriteLine("Do you want to add more numbers [Y/N] : ");
+                Y_N = Convert.ToChar(Console.ReadLine());
+            } while (Y_N == 'Y' || Y_N == 'y');
+
+            SortListUsingDelegate.OnSorting += SortListUsingDelegate_OnSorting;
+
+            return numbers;
+        }
+
+        private static void SortListUsingDelegate_OnSorting(List<int> list)
+        {
+            list.Sort();
+            Console.WriteLine("\n\nList After sorting");
+            list.ForEach(item => Console.WriteLine(item));
+
+            Console.ReadKey();
+
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> Numbers = clsBaseClass.ReadNumberFromScreen();
+
+            SortListUsingDelegate even = new SortListUsingDelegate(Numbers);
+
+        }
+    }
+}
