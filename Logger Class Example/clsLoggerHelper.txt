@@ -1,0 +1,39 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp10
+{
+    static class clsLogHelper
+    {
+        static public void LogToScreen(string Message)
+        {
+            string FullMessage = $"This is the logged message:\n{Message},\nAt Time: {DateTime.Now}";
+
+            Console.WriteLine(Message);
+        }
+
+        static public void LogToFile(string Message)
+        {
+            string filePath = "output.txt";
+            string FullMessage = $"This is the logged message:\n{Message},\nAt Time: {DateTime.Now}";
+
+            try
+            {
+                // Create file and write to it
+                using (StreamWriter writer = new StreamWriter(filePath,true))
+                {
+                    writer.WriteLine(FullMessage);
+                }
+                Console.WriteLine("File created and written successfully!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+        }
+    }
+}

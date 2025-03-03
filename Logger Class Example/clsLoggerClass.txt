@@ -1,0 +1,24 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp10
+{
+    public class clsLogger
+    {
+        public delegate void LogAction(string Message);
+
+        private LogAction _LogAction;
+        public clsLogger(LogAction LogAction)
+        {
+            this._LogAction = LogAction;
+        }
+
+        public void Log(string Message)
+        {
+            _LogAction(Message);
+        }
+    }
+}

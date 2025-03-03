@@ -1,0 +1,25 @@
+using ConsoleApp10;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DelegationExample
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            // This instance will log to a file by passing the function responsible for this process as an argument.
+            clsLogger LogToFile = new clsLogger(clsLogHelper.LogToFile);
+            LogToFile.Log("This is a call to log in a file and test the code..:)");
+
+            // This instance will log to the console by passing the function responsible for this process as an argument.
+            clsLogger LogToScreen = new clsLogger(clsLogHelper.LogToScreen);
+            LogToScreen.Log("This is a call to log this message in the console and test the code..:)");
+
+            Console.ReadKey();
+        }
+    }
+}
