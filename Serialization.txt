@@ -1,22 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.IO;
-using System.Runtime.Serialization.Json;
 using System.Runtime.Serialization.Formatters.Binary;
-
-
-
-[Serializable]
-public class Person
-{
-    public string Name { get; set; }
-    public int Age { get; set; }
-}
-
+using System.Runtime.Serialization.Json; //Don't missing to add reference to (System.RunTime.Serialization)
 
 
 namespace Serialization
@@ -37,12 +23,21 @@ namespace Serialization
             In C#, the System.Runtime.Serialization namespace provides classes for binary and XML serialization.
             The DataContractJsonSerializer class is commonly used for JSON serialization.
      */
+
+
+    [Serializable]
+    public class Person
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
+
     internal class Program
     {
         static void Main(string[] args)
         {
             // Create an instance of the Person class
-            Person person = new Person { Name = "Mohammed Abu-Hadhoud", Age = 46 };
+            Person person = new Person { Name = "Ghayath Alali", Age = 22 };
 
 
             // XML serialization
@@ -56,6 +51,7 @@ namespace Serialization
             // Deserialize the object back
             using (TextReader reader = new StreamReader("person.xml"))
             {
+                Console.WriteLine("Deserialize from XML");
                 Person deserializedPerson = (Person)serializer.Deserialize(reader);
                 Console.WriteLine($"Name: {deserializedPerson.Name}, Age: {deserializedPerson.Age}");
             }
@@ -67,14 +63,14 @@ namespace Serialization
             //-------------------------------------------------------------------------------------------------------------------------
 
             // Create an instance of the Person class
-            Person person1 = new Person { Name = "Mohammed Abu-Hadhoud", Age = 30 };
+            Person person1 = new Person { Name = "Ghayath Alali", Age = 22 };
 
 
             // JSON serialization
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Person1));
+            DataContractJsonSerializer Jsonserializer = new DataContractJsonSerializer(typeof(Person));
             using (MemoryStream stream = new MemoryStream())
             {
-                serializer.WriteObject(stream, person1);
+                Jsonserializer.WriteObject(stream, person1);
                 string jsonString = System.Text.Encoding.UTF8.GetString(stream.ToArray());
 
 
@@ -86,7 +82,8 @@ namespace Serialization
             // Deserialize the object back
             using (FileStream stream = new FileStream("person.json", FileMode.Open))
             {
-                Person deserializedPerson = (Person)serializer.ReadObject(stream);
+                Console.WriteLine("\n\nDeserialize from Json");
+                Person deserializedPerson = (Person)Jsonserializer.ReadObject(stream);
                 Console.WriteLine($"Name: {deserializedPerson.Name}, Age: {deserializedPerson.Age}");
             }
 
@@ -99,7 +96,7 @@ namespace Serialization
 
 
             // Create an instance of the Person class
-            Person person2 = new Person { Name = "Mohammed Abu-Hadhoud", Age = 46 };
+            Person person2 = new Person { Name = "Ghayath Alali", Age = 22 };
 
 
             // Binary serialization
@@ -113,11 +110,14 @@ namespace Serialization
             // Deserialize the object back
             using (FileStream stream = new FileStream("person.bin", FileMode.Open))
             {
+                Console.WriteLine("\n\nDeserialize from Binary");
                 Person deserializedPerson = (Person)formatter.Deserialize(stream);
                 Console.WriteLine($"Name: {deserializedPerson.Name}, Age: {deserializedPerson.Age}");
-                Console.ReadKey();
             }
+
+
+            Console.WriteLine("All Processes are done");
+            Console.ReadKey();
         }
-    }
     }
 }
