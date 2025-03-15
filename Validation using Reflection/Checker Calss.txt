@@ -1,0 +1,105 @@
+using System;
+using System.Linq;
+using System.Reflection;
+
+
+namespace Validator.Helper
+{
+    public static class clsChecker
+    {
+        private static bool _CheckNumericValues<T>(PropertyInfo property, T Object)
+        {
+
+           
+                //This line will get the max and min value as defined in attribute
+                var rangeAttribute = (RangAttribute)Attribute.GetCustomAttribute(property, typeof(RangAttribute));
+
+                int? value = (int)property.GetValue(Object);
+
+                if (value != null)
+                {
+                    // Perform validation
+                    if (value < rangeAttribute.Min || value > rangeAttribute.Max)
+                    {
+                        Console.WriteLine($"Validation failed for property '{property.Name}': {rangeAttribute.ErrorMessage}");
+                        return false;
+                    }
+                }
+            
+            
+        
+
+            return true;
+        }
+        private static bool _CheckTextValues<T>(PropertyInfo property, T Object)
+        {
+
+           
+                //This line will get the max and min value as defined in attribute
+                var LangthAttribute = (StringLengthAttribute)Attribute.GetCustomAttribute(property, typeof(StringLengthAttribute));
+
+                int? value = (int)property.GetValue(Object).ToString().Length;
+
+                if (value != null)
+                {
+                    // Perform validation
+                    if (value > LangthAttribute.Length)
+                    {
+                        Console.WriteLine($"Validation failed for property '{property.Name}': {LangthAttribute.ErrorMessage}");
+                        return false;
+                    }
+                }
+            
+            
+
+
+            return true;
+        }
+        private static bool _CheckDatesValues<T>(PropertyInfo property, T Object)
+        {
+
+           
+                //This line will get the max and min value as defined in attribute
+                var DateTimeAttribute = (DateRangeAttribute)Attribute.GetCustomAttribute(property, typeof(DateRangeAttribute));
+
+                DateTime value = (DateTime)property.GetValue(Object);
+
+                if (value != null)
+                {
+                    // Perform validation
+                    if (!(value >= DateTimeAttribute.MinDate && value <= DateTimeAttribute.MaxDate))
+                    {
+                        Console.WriteLine($"Validation failed for property '{property.Name}': {DateTimeAttribute.ErrorMessage}");
+                        return false;
+                    }
+                }
+            
+            
+
+
+            return true;
+        }
+
+
+        public static void Validate<T>(T Object)
+        {
+            Type type = typeof(T);
+
+            foreach (var property in type.GetProperties())
+            {
+                if (Attribute.IsDefined(property, typeof(RangAttribute)))
+                {
+                    if (!_CheckNumericValues(property, Object))return;
+                }
+                if (Attribute.IsDefined(property, typeof(StringLengthAttribute)))
+                {
+                    if(!_CheckTextValues(property, Object))return;
+                }
+                if (Attribute.IsDefined(property, typeof(DateRangeAttribute)))
+                {
+                    if(!_CheckDatesValues(property, Object))return; 
+                }
+            }
+        }
+    }
+}

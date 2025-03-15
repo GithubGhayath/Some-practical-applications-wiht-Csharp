@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Validator.Helper
+{
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class RangAttribute : Attribute 
+    {
+        private int _Max = new int();
+        private int _Min = new int();
+        private string _ErrorMessage = string.Empty;
+        public RangAttribute(int min,int max, string errorMessage)
+        {
+            this._Max = max;
+            this._Min = min;
+            this._ErrorMessage = errorMessage;
+        }
+
+        public int Max { get{ return _Max; } }
+        public int Min { get { return _Min; } }
+        public string ErrorMessage { get { return _ErrorMessage; } }
+    }
+
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class StringLengthAttribute : Attribute
+    {
+        private int _Length = new int();
+        private string _ErrorMessage = string.Empty;
+        public StringLengthAttribute(int length, string errorMessage)
+        {
+            this._Length = length;
+            this._ErrorMessage = errorMessage;
+        }
+        public int Length { get { return _Length;} }
+        public string ErrorMessage { get { return _ErrorMessage; } }
+    }
+
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class DateRangeAttribute : Attribute
+    {
+        private DateTime _MaxDate = new DateTime();
+        private DateTime _MinDate = new DateTime();
+        private string _ErrorMessage = string.Empty;
+        public DateRangeAttribute(string minDate, string maxDate, string errorMessage)
+        {
+
+            this._MinDate = DateTime.Parse(minDate);
+            this._MaxDate = DateTime.Parse(maxDate);
+            this._ErrorMessage = errorMessage;
+        }
+
+        public DateTime MaxDate { get { return _MaxDate; } }
+        public DateTime MinDate { get { return _MinDate; } }
+        public string ErrorMessage { get { return _ErrorMessage; } }
+    }
+}

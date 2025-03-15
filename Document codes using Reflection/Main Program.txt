@@ -1,0 +1,98 @@
+using Documentor.Helper;
+using System;
+
+
+namespace Documentor
+{
+    [Description("This is a class attribute")]
+    class MyClass
+    {
+        [Description("This is a method attribute")]
+        public void MyMethod()
+        {
+            // Method implementation
+        }
+    }
+
+    [Description("This is a Person Class it represent person that contains in database")]
+    class Person
+    {
+        [Description("This container for ID")]
+        public int ID { get; set; }
+        [Description("This container for Name")]
+        public string Name { get; set; }
+        [Description("This is a method for send email")]
+        public void SendEmail()
+        {
+            // Method implementation
+        }
+
+        [Description("This is a method for send SMS")]
+        public void SendSMS()
+        {
+            // Method implementation
+        }
+
+        [Description("This is a method for Get Gender of current person")]
+        public void GetGender()
+        {
+            // Method implementation
+        }
+
+        [Description("This is a method for send fax")]
+        public void SendFax()
+        {
+            // Method implementation
+        }
+    }
+
+    [Description("This is a Employee Class it represent Employee that contains in database")]
+    class Employee
+    {
+        [Description("This container for EmployeeID")]
+        public int EmployeeID { get; set; }
+
+        [Description("This container for Name")]
+        public string Name { get; set; }
+
+
+        [Description("This is a method for send email")]
+        public void SendEmail()
+        {
+            // Method implementation
+        }
+
+        [Description("This is a method for send SMS")]
+        public void SendSMS()
+        {
+            // Method implementation
+        }
+
+        [Description("This is a method for Get Gender of current person")]
+        public void GetGender()
+        {
+            // Method implementation
+        }
+
+        [Description("This is a method for send fax")]
+        public void SendFax()
+        {
+            // Method implementation
+        }
+    }
+
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            clsDocumentationWriter.WriteDocumentation<MyClass>();
+            clsDocumentationWriter.WriteDocumentation<Person>();
+            clsDocumentationWriter.WriteDocumentation<Employee>();
+            Console.WriteLine("Done");
+
+
+            Console.ReadKey();
+        }
+    }
+}

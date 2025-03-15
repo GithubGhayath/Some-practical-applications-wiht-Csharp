@@ -1,0 +1,80 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace Documentor.Helper
+{
+    public static class clsDocumentationWriter
+    {
+        public static void WriteDocumentation<T>()
+        {
+
+            // Get the type of MyClass
+            Type type = typeof(T);
+
+            string Text = $"The Documentation of {type.Name}:\n\n";
+
+
+
+            // Get class-level attributes
+            _GetClassLevelAttribute(type, ref Text) ;
+
+
+            // Get method-level attributes
+            _GetMethodsLevelAttribute(type, ref Text);
+
+
+            // Get properties-level attributes
+            _GetPropertiesLevelAttribute(type,ref Text);    
+
+
+            //Write the text containt in file.txt
+            _WriteDocument(Text, $"{type.Name}.txt");
+
+        }
+        private static void _GetClassLevelAttribute(Type type, ref string Text)
+        {
+            DescriptionAttribute Attribute = type.GetCustomAttribute<DescriptionAttribute>();
+            if (Attribute != null)
+                Text += $"{Attribute.Description}\n";
+        }
+        private static void _GetPropertiesLevelAttribute(Type type, ref string Text)
+        {
+            Text += $"\n\nThe properties of {type.Name}:\n";
+            PropertyInfo[] propertyInfo = type.GetProperties();
+            foreach (PropertyInfo prop in propertyInfo)
+            {
+                DescriptionAttribute Attributes = prop.GetCustomAttribute<DescriptionAttribute>();
+                if (Attributes != null)
+                    Text += $"\n{prop.Name} : {Attributes.Description}";
+            }
+        }
+        private static void _GetMethodsLevelAttribute(Type type,ref string Text)
+        {
+            Text += $"\n\nThe methods of {type.Name}:\n";
+            MethodInfo[] methodInfo = type.GetMethods();
+
+            foreach (MethodInfo method in methodInfo)
+            {
+                DescriptionAttribute Attributes = method.GetCustomAttribute<DescriptionAttribute>();
+                if (Attributes != null)
+                    Text += $"\n{method.Name} : {Attributes.Description}";
+            }
+        }
+        private static void _WriteDocument(string Text, string Path)
+        {
+            using (StreamWriter writer = new StreamWriter(Path))
+            {
+                writer.Write(Text);
+
+            }
+        }
+        
+    }
+}
