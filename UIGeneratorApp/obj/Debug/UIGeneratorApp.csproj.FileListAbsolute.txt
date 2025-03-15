@@ -1,0 +1,10 @@
+C:\Users\ghaya\source\repos\UIGeneratorApp\bin\Debug\UIGeneratorApp.exe.config
+C:\Users\ghaya\source\repos\UIGeneratorApp\bin\Debug\UIGeneratorApp.exe
+C:\Users\ghaya\source\repos\UIGeneratorApp\bin\Debug\UIGeneratorApp.pdb
+C:\Users\ghaya\source\repos\UIGeneratorApp\obj\Debug\UIGeneratorApp.csproj.AssemblyReference.cache
+C:\Users\ghaya\source\repos\UIGeneratorApp\obj\Debug\UIGeneratorApp.Form1.resources
+C:\Users\ghaya\source\repos\UIGeneratorApp\obj\Debug\UIGeneratorApp.Properties.Resources.resources
+C:\Users\ghaya\source\repos\UIGeneratorApp\obj\Debug\UIGeneratorApp.csproj.GenerateResource.cache
+C:\Users\ghaya\source\repos\UIGeneratorApp\obj\Debug\UIGeneratorApp.csproj.CoreCompileInputs.cache
+C:\Users\ghaya\source\repos\UIGeneratorApp\obj\Debug\UIGeneratorApp.exe
+C:\Users\ghaya\source\repos\UIGeneratorApp\obj\Debug\UIGeneratorApp.pdb
