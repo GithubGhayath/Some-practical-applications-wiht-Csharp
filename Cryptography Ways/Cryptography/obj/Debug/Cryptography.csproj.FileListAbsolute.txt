@@ -1,0 +1,11 @@
+C:\Users\ghaya\source\repos\Cryptography\bin\Debug\Cryptography.exe.config
+C:\Users\ghaya\source\repos\Cryptography\bin\Debug\Cryptography.exe
+C:\Users\ghaya\source\repos\Cryptography\bin\Debug\Cryptography.pdb
+C:\Users\ghaya\source\repos\Cryptography\obj\Debug\Cryptography.csproj.AssemblyReference.cache
+C:\Users\ghaya\source\repos\Cryptography\obj\Debug\Cryptography.csproj.CoreCompileInputs.cache
+C:\Users\ghaya\source\repos\Cryptography\obj\Debug\Cryptography.exe
+C:\Users\ghaya\source\repos\Cryptography\obj\Debug\Cryptography.pdb
+C:\Users\ghaya\Some-practical-applications-wiht-Csharp\Cryptography Ways\Cryptography\obj\Debug\Cryptography.csproj.AssemblyReference.cache
+C:\Users\ghaya\Some-practical-applications-wiht-Csharp\Cryptography Ways\Cryptography\obj\Debug\Cryptography.csproj.CoreCompileInputs.cache
+C:\Users\ghaya\Some-practical-applications-wiht-Csharp\Cryptography Ways\Cryptography\obj\Debug\Cryptography.exe
+C:\Users\ghaya\Some-practical-applications-wiht-Csharp\Cryptography Ways\Cryptography\obj\Debug\Cryptography.pdb
